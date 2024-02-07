@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Пользователи</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" type="text/css"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+</head>
+<body>
+<header th:insert="~{fragments/nav.html}"></header>
+<div class="container">
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">id</th>
+            <th scope="col">username</th>
+            <th scope="col">password</th>
+            <th scope="col">role</th>
+            <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user : ${users}">
+            <td th:text="${user.getId()}"></td>
+            <td th:text="${user.getUsername()}"></td>
+            <td th:text="${user.getPassword()}"></td>
+            <td th:text="${user.getRoleId().getName()}"></td>
+            <td>
+                <button class="btn btn-primary" id="delete">Удалить</button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <form method="post" action="api/users" style="width: 100% !important">
+        <div class="mb-3">
+            <label for="username" class="form-label">Имя пользователя</label>
+            <input type="text" class="form-control" id="username">
+        </div>
+        <div class="mb-3">
+            <label for="password" class="form-label">Пароль</label>
+            <input type="text" class="form-control" name="password" id="password">
+        </div>
+        <div class="mb-3">
+            <label for="roles-menu">Выбор роли</label>
+            <select class="form-select" name="roles-menu" id="roles-menu">
+                <option value="3">Админ</option>
+                <option value="4">Пользователь</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <button class="btn btn-primary" id="create-user-submit" type="button">Создать</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    let createUserButton = document.getElementById("create-user-submit");
+    let deleteUserButtons = document.querySelectorAll("#delete");
+
+    deleteUserButtons.forEach((element) => {
+        element.addEventListener("click", (e) => {
+            deleteUser(+e.target.parentNode.parentNode.children[0].innerText);
+        });
+    });
+
+    createUserButton.addEventListener("click", (e) => {
+        let username = document.getElementById("username").value;
+        let password = document.getElementById("password").value;
+        let roleId = document.getElementById("roles-menu").value;
+
+        const response = fetch("/api/users", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                "username": username,
+                "password": password,
+                "roleId": roleId
+            })
+        }).then(result => {
+            console.log(result);
+            location.reload();
+        }).catch(error => console.log(error));
+    });
+
+    function deleteUser(userId) {
+        console.log(userId)
+        const response = fetch("/api/users", {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({"userId": userId})
+        }).then(result => {
+            console.log(result);
+            location.reload();
+        }).catch(error => console.log(error));
+    }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+</body>
+</html>

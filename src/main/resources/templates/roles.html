@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Роли</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" type="text/css"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+</head>
+<body>
+<header th:insert="~{fragments/nav.html}"></header>
+<div class="container">
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">id</th>
+            <th scope="col">name</th>
+            <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="role : ${roles}">
+            <td th:text="${role.getId()}"></td>
+            <td th:text="${role.getName()}"></td>
+            <td>
+                <button class="btn btn-primary" id="delete">Удалить</button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <form method="post" action="api/roles">
+        <div class="mb-3">
+            <label for="name" class="form-label">Название роли</label>
+            <input type="text" class="form-control" id="name">
+        </div>
+        <div class="mb-3">
+            <button class="btn btn-primary" id="create-role-submit" type="button">Создать</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    let addRoleButton = document.getElementById("create-role-submit");
+    let deleteRoleButtons = document.querySelectorAll("#delete");
+
+    deleteRoleButtons.forEach((element) => {
+        element.addEventListener("click", (e) => {
+            deleteRole(+e.target.parentNode.parentNode.children[0].innerText);
+        });
+    });
+
+    addRoleButton.addEventListener("click", (e) => {
+        let roleName = document.getElementById("name").value;
+
+        try {
+            const response = fetch("/api/roles", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({"name": roleName})
+            }).then(result => {
+                console.log(result);
+                location.reload();
+            }).catch(error => console.log(error));
+        } catch (ex) {
+            console.log(`Error sending request: ${ex}`);
+        }
+    });
+
+    function deleteRole(roleId) {
+        const response = fetch("/api/roles", {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({"roleId": roleId})
+        }).then(result => {
+            console.log(result);
+            location.reload();
+        }).catch(error => console.log(error));
+    }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+</body>
+</html>

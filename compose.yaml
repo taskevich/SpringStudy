@@ -1,0 +1,9 @@
+services:
+  postgres:
+    image: 'postgres:latest'
+    environment:
+      - 'POSTGRES_DB=springstudy'
+      - 'POSTGRES_PASSWORD=ljYjhsdjg43IJ17Fhgf'
+      - 'POSTGRES_USER=postgres'
+    ports:
+      - '5432'
