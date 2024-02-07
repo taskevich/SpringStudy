@@ -1,11 +1,9 @@
 package org.example.studyspring.app;
 
-import org.example.studyspring.app.Users.Users;
-import org.example.studyspring.app.Users.UsersRepository;
+import org.example.studyspring.app.models.Users.*;
 import org.example.studyspring.app.models.Roles.Roles;
 import org.example.studyspring.app.models.Roles.RolesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.Banner;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;

@@ -1,6 +1,5 @@
-package org.example.studyspring.app.Users;
+package org.example.studyspring.app.models.Users;
 
-import org.example.studyspring.app.models.Roles.Roles;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

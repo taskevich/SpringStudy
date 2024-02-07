@@ -1,4 +1,4 @@
-package org.example.studyspring.app.Users;
+package org.example.studyspring.app.models.Users;
 
 import jakarta.persistence.*;
 import org.example.studyspring.app.models.Roles.Roles;
